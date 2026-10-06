@@ -1,0 +1,11 @@
+{
+  "name":"RevenuePilot Pro",
+  "short_name":"RevenuePilot Pro",
+  "description":"AI-powered content system for contractors.",
+  "start_url":"./",
+  "scope":"./",
+  "display":"standalone",
+  "background_color":"#0b0f0d",
+  "theme_color":"#39e26d",
+  "icons":[{"src":"../icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
+}
