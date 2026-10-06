@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>RevenuePilot Studio</title>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<style>
+:root{--bg:#0b0f0d;--panel:#121814;--panel2:#18211b;--line:#263229;--text:#eef7ef;--muted:#9bb0a1;--green:#39e26d;--green2:#16b84f;--red:#ff6b6b;--amber:#ffbf47}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(135deg,#070a08,#111812);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Arial}
+header{position:sticky;top:0;z-index:10;background:#0b0f0def;border-bottom:1px solid var(--line);backdrop-filter:blur(12px)}
+.wrap{max-width:1250px;margin:auto;padding:18px} .brand{display:flex;align-items:center;gap:10px;font-weight:800}.logo{width:34px;height:34px;border:1px solid #3b5;border-radius:9px;display:grid;place-items:center;color:var(--green);background:#132018}
+nav{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}.tab{border:1px solid var(--line);background:#101611;color:var(--muted);padding:9px 13px;border-radius:9px;cursor:pointer}.tab.active{color:#07110a;background:var(--green);border-color:var(--green)}
+main{max-width:1250px;margin:auto;padding:20px}.view{display:none}.view.active{display:block}.grid{display:grid;grid-template-columns:1.1fr .9fr;gap:18px}@media(max-width:900px){.grid{grid-template-columns:1fr}}
+.card{background:linear-gradient(180deg,var(--panel),#0e140f);border:1px solid var(--line);border-radius:14px;padding:18px;box-shadow:0 16px 50px #0005}.card h2,.card h3{margin-top:0}
+label{display:block;color:var(--muted);font-size:13px;margin:13px 0 6px}input,textarea,select{width:100%;background:#0a0f0c;border:1px solid #2c3b30;color:var(--text);border-radius:9px;padding:11px}textarea{min-height:100px;resize:vertical}
+button{border:0;border-radius:9px;padding:11px 14px;font-weight:750;cursor:pointer}.primary{background:var(--green);color:#07110a}.secondary{background:#1b251e;color:var(--text);border:1px solid #304136}.danger{background:#35191a;color:#ffc1c1}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.row>*{flex:1}.status{display:inline-flex;align-items:center;gap:7px;padding:7px 10px;border:1px solid var(--line);border-radius:999px;color:var(--muted);font-size:12px}.dot{width:8px;height:8px;border-radius:99px;background:#68776b}.ok .dot{background:var(--green)}.warn .dot{background:var(--amber)}
+canvas{width:100%;max-width:360px;aspect-ratio:9/16;background:#000;border:1px solid #304136;border-radius:15px;display:block;margin:auto}.small{font-size:12px;color:var(--muted)}.pill{display:inline-block;background:#16231a;color:#bff7ce;border:1px solid #29412f;border-radius:999px;padding:4px 8px;font-size:12px;margin:3px}
+.queueItem{border:1px solid var(--line);border-radius:10px;padding:12px;margin:10px 0;background:#0d130f}.success{color:#8effa9}.error{color:#ff9f9f}.hidden{display:none}
+a{color:#8dffab}code{background:#09100b;padding:2px 5px;border-radius:5px}
+</style>
+</head>
+<body>
+<header><div class="wrap"><div class="brand"><div class="logo">RP</div><div>RevenuePilot Studio</div><span class="status" id="ytStatus"><span class="dot"></span>YouTube not connected</span></div>
+<nav>
+<button class="tab active" data-tab="studio">AI Video Studio</button>
+<button class="tab" data-tab="publish">Publish Center</button>
+<button class="tab" data-tab="queue">Queue</button>
+<button class="tab" data-tab="settings">Settings</button>
+</nav></div></header>
+<main>
+<section id="studio" class="view active">
+<div class="grid">
+<div class="card">
+<h2>Build a Short</h2>
+<p class="small">Creates a fresh contractor-focused vertical short in your browser. No Windows installer, Go, PowerShell, or FFmpeg.</p>
+<label>Topic</label><select id="topic"></select>
+<div class="row"><div><label>Title</label><input id="title"></div><div><label>Length</label><select id="duration"><option value="15">15 sec</option><option value="20" selected>20 sec</option><option value="25">25 sec</option><option value="30">30 sec</option></select></div></div>
+<label>Hook</label><input id="hook">
+<label>Key points — one per line</label><textarea id="points"></textarea>
+<label>CTA</label><input id="cta" value="Stop guessing on bids. Get the Contractor Bid Starter Pack — link in description.">
+<label>YouTube description</label><textarea id="description"></textarea>
+<div class="row" style="margin-top:14px"><button class="secondary" id="fresh">Generate Fresh Content</button><button class="primary" id="render">Render Video</button></div>
+<div id="renderMsg" class="small" style="margin-top:12px"></div>
+</div>
+<div class="card"><h3>Video Preview</h3><canvas id="c" width="1080" height="1920"></canvas><video id="preview" controls playsinline style="display:none;width:100%;max-width:360px;aspect-ratio:9/16;margin:auto;border-radius:15px;background:#000"></video>
+<div class="row" style="margin-top:12px"><button class="secondary" id="download" disabled>Download Video</button><button class="primary" id="sendPublish" disabled>Use in Publish Center</button></div></div>
+</div>
+</section>
+<section id="publish" class="view">
+<div class="grid"><div class="card"><h2>Publish Center</h2>
+<p class="small">Connect YouTube once, then RevenuePilot can upload the video generated in Studio.</p>
+<div class="row"><button class="primary" id="connectYT">Connect YouTube</button><button class="secondary" id="disconnectYT">Disconnect</button></div>
+<label>Video</label><input type="file" id="videoFile" accept="video/*">
+<label>Title</label><input id="pubTitle">
+<label>Description</label><textarea id="pubDesc"></textarea>
+<label>Privacy</label><select id="privacy"><option value="private">Private</option><option value="unlisted" selected>Unlisted</option><option value="public">Public</option></select>
+<button class="primary" id="publishYT" style="margin-top:14px;width:100%">Publish to YouTube</button>
+<div id="pubMsg" class="small" style="margin-top:12px"></div>
+</div><div class="card"><h3>Current Video</h3><div id="fileInfo" class="small">No video selected.</div><h3 style="margin-top:22px">TikTok</h3><span class="status warn"><span class="dot"></span>Pending approval</span><p class="small">TikTok posting stays off until your TikTok developer app is approved.</p></div></div>
+</section>
+<section id="queue" class="view"><div class="card"><h2>Queue</h2><p class="small">Rendered videos saved in this browser appear here.</p><div id="queueList"></div></div></section>
+<section id="settings" class="view">
+<div class="grid"><div class="card"><h2>YouTube Setup</h2><p class="small">Use a Google <b>Web application OAuth Client ID</b>. No client secret is stored here.</p>
+<label>Google Web Client ID</label><input id="clientId" placeholder="xxxxxxxx.apps.googleusercontent.com">
+<button class="primary" id="saveSettings" style="margin-top:14px">Save Settings</button>
+<p class="small">For GitHub Pages add <code>https://greatwhite26.github.io</code> as an Authorized JavaScript origin in Google Cloud.</p>
+</div><div class="card"><h2>Money Settings</h2><label>Product</label><input id="product" value="Contractor Bid Starter Pack"><label>Checkout URL</label><input id="checkout" placeholder="https://..."><label>CTA</label><input id="ctaSetting" value="Get the Contractor Bid Starter Pack — link in description."><button class="secondary" id="saveMoney" style="margin-top:14px">Save</button></div></div>
+</section>
+</main>
+<script>
+const topics=[
+["3 Commercial Bidding Mistakes","Stop losing margin before the job even starts.",["Price the scope—not just square footage.","Separate labor, material, equipment, and travel.","Write exclusions before the GC asks."]],
+["Markup vs Profit","A 20% markup is not a 20% profit margin.",["Markup is added to your cost.","Margin is profit divided by selling price.","Know which number your estimate uses."]],
+["Change Order Mistakes","Never do extra work on a handshake.",["Document the changed scope.","Price labor and material before proceeding.","Get written approval when the contract requires it."]],
+["Travel Job Pricing","Out-of-state jobs can erase your profit fast.",["Price hotel and per diem separately.","Include drive time and mobilization.","Add risk for schedule changes and remobilization."]],
+["Drywall Bid Check","Your drywall number needs more than board count.",["Count board, finish level, and height.","Include lifts, protection, and cleanup.","Verify backing and specialty details."]],
+["Metal Framing Bid Check","Cheap framing bids usually miss details.",["Check gauge, height, and stud spacing.","Count headers, backing, and deflection details.","Separate material handling and lift time."]],
+["Commercial Proposal Tips","A clean proposal can beat a cheaper bid.",["State exactly what is included.","List exclusions clearly.","Give a simple next step to award the job."]],
+["Overhead Pricing","Overhead belongs in every job you price.",["Office costs do not disappear on small jobs.","Spread overhead using a consistent method.","Do not confuse overhead with profit."]],
+["Crew Productivity","Labor hours can make or break your bid.",["Estimate production by task.","Adjust for height and access.","Track actual hours and update your rates."]],
+["Low Bid Trap","Winning every job can be a warning sign.",["Compare your number to real production.","Check material escalation and waste.","Protect profit before chasing volume."]]
+const $=id=>document.getElementById(id);
+let videoBlob=null, accessToken=null;
+function money(){return {product:localStorage.rpProduct||"Contractor Bid Starter Pack",checkout:localStorage.rpCheckout||"",cta:localStorage.rpCTA||"Get the Contractor Bid Starter Pack — link in description."}}
+function fillTopicList(){topics.forEach((t,i)=>{let o=document.createElement("option");o.value=i;o.textContent=t[0];$("topic").appendChild(o)});$("topic").onchange=()=>applyTopic(+$("topic").value);applyTopic(0)}
+function applyTopic(i){const t=topics[i];$("title").value=t[0];$("hook").value=t[1];$("points").value=t[2].join("\n");$("cta").value=money().cta;$("description").value=t[1]+"\n\n"+t[2].map(x=>"• "+x).join("\n")+"\n\n"+money().cta+(money().checkout?"\n"+money().checkout:"")+"\n\n#contractor #construction #estimating #commercialconstruction #bidding"}
+function fresh(){let i=Math.floor(Math.random()*topics.length);$("topic").value=i;applyTopic(i)}
+function wrap(ctx,text,x,y,maxWidth,lineHeight,maxLines=4){const words=text.split(" ");let line="",lines=[];for(const w of words){let test=line?line+" "+w:w;if(ctx.measureText(test).width>maxWidth&&line){lines.push(line);line=w}else line=test}if(line)lines.push(line);lines=lines.slice(0,maxLines);lines.forEach((ln,i)=>ctx.fillText(ln,x,y+i*lineHeight));return lines.length}
+function drawFrame(ctx,t,d,title,hook,points,cta){let p=t/d;ctx.clearRect(0,0,1080,1920);let g=ctx.createLinearGradient(0,0,1080,1920);g.addColorStop(0,"#07120a");g.addColorStop(1,"#18341e");ctx.fillStyle=g;ctx.fillRect(0,0,1080,1920);for(let i=0;i<8;i++){let x=(i*170+(t*45))%1300-100,y=180+i*210;ctx.fillStyle="rgba(57,226,109,.07)";ctx.beginPath();ctx.arc(x,y,120+40*Math.sin(t+i),0,Math.PI*2);ctx.fill()}
+ctx.fillStyle="#39e26d";ctx.font="700 42px Arial";ctx.fillText("REVENUEPILOT",70,90);
+let stage=p<.18?0:p<.72?1:2;
+if(stage===0){ctx.fillStyle="#effff2";ctx.font="800 82px Arial";wrap(ctx,hook,70,590,940,100,5);ctx.fillStyle="#9bb0a1";ctx.font="600 38px Arial";wrap(ctx,title.toUpperCase(),70,1120,900,52,3)}
+else if(stage===1){let idx=Math.min(points.length-1,Math.floor((p-.18)/(.54/Math.max(points.length,1))));ctx.fillStyle="#39e26d";ctx.font="800 48px Arial";ctx.fillText("TIP "+(idx+1),70,450);ctx.fillStyle="#fff";ctx.font="800 78px Arial";wrap(ctx,points[idx]||"",70,560,930,96,5);ctx.fillStyle="#9bb0a1";ctx.font="500 34px Arial";ctx.fillText(title,70,1450)}
+else{ctx.fillStyle="#39e26d";ctx.font="800 54px Arial";ctx.fillText("NEXT STEP",70,470);ctx.fillStyle="#fff";ctx.font="800 72px Arial";wrap(ctx,cta,70,590,930,90,6)}
+ctx.fillStyle="rgba(255,255,255,.35)";ctx.fillRect(70,1810,940,8);ctx.fillStyle="#39e26d";ctx.fillRect(70,1810,940*p,8)}
+async function renderVideo(){if(!window.MediaRecorder){alert("This browser does not support MediaRecorder.");return} $("renderMsg").textContent="Rendering… keep this tab open.";const c=$("c"),ctx=c.getContext("2d"),dur=+$("duration").value,title=$("title").value.trim(),hook=$("hook").value.trim(),points=$("points").value.split("\n").map(x=>x.trim()).filter(Boolean),cta=$("cta").value.trim();const stream=c.captureStream(30);let mime="video/webm;codecs=vp9";if(!MediaRecorder.isTypeSupported(mime)) mime="video/webm;codecs=vp8";if(!MediaRecorder.isTypeSupported(mime)) mime="video/webm";const rec=new MediaRecorder(stream,{mimeType:mime,videoBitsPerSecond:6000000});let chunks=[];rec.ondataavailable=e=>{if(e.data.size)chunks.push(e.data)};const done=new Promise(r=>rec.onstop=r);rec.start(1000);let start=performance.now();await new Promise(resolve=>{function f(now){let t=(now-start)/1000;drawFrame(ctx,Math.min(t,dur),dur,title,hook,points,cta);if(t<dur)requestAnimationFrame(f);else resolve()}requestAnimationFrame(f)});rec.stop();await done;videoBlob=new Blob(chunks,{type:mime});let url=URL.createObjectURL(videoBlob);$("preview").src=url;$("preview").style.display="block";c.style.display="none";$("download").disabled=false;$("sendPublish").disabled=false;$("renderMsg").innerHTML='<span class="success">Video ready — '+(videoBlob.size/1048576).toFixed(1)+' MB.</span>';saveQueueMeta({title,desc:$("description").value,size:videoBlob.size,created:new Date().toISOString()})}
+function saveQueueMeta(x){let q=JSON.parse(localStorage.rpQueue||"[]");q.unshift(x);q=q.slice(0,20);localStorage.rpQueue=JSON.stringify(q);renderQueue()}
+function renderQueue(){let q=JSON.parse(localStorage.rpQueue||"[]");$("queueList").innerHTML=q.length?q.map(x=>'<div class="queueItem"><b>'+esc(x.title)+'</b><div class="small">'+new Date(x.created).toLocaleString()+' • '+(x.size/1048576).toFixed(1)+' MB</div></div>').join(""):'<div class="small">No videos rendered yet.</div>'}
+function esc(s){return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
+function loadSettings(){$("clientId").value=localStorage.rpGoogleClientId||"";$("product").value=money().product;$("checkout").value=money().checkout;$("ctaSetting").value=money().cta}
+function setYTStatus(on){$("ytStatus").className="status "+(on?"ok":"");$("ytStatus").innerHTML='<span class="dot"></span>'+(on?"YouTube connected":"YouTube not connected")}
+function connectYT(){let client_id=(localStorage.rpGoogleClientId||"").trim();if(!client_id){showTab("settings");alert("Add your Google Web Client ID first.");return}if(!window.google?.accounts?.oauth2){alert("Google sign-in is still loading. Try again in a few seconds.");return}const client=google.accounts.oauth2.initTokenClient({client_id,scope:"https://www.googleapis.com/auth/youtube.upload https://www.googleapis.com/auth/youtube.readonly",callback:r=>{if(r.error){$("pubMsg").textContent="Google OAuth error: "+r.error;return}accessToken=r.access_token;setYTStatus(true);$("pubMsg").innerHTML='<span class="success">YouTube connected for this browser session.</span>'}});client.requestAccessToken({prompt:"consent"})}
+async function publishYT(){if(!accessToken){$("pubMsg").innerHTML='<span class="error">Connect YouTube first.</span>';return}let f=$("videoFile").files[0];if(!f&&videoBlob)f=new File([videoBlob],"revenuepilot-short.webm",{type:videoBlob.type||"video/webm"});if(!f){$("pubMsg").innerHTML='<span class="error">Choose or render a video first.</span>';return}let meta={snippet:{title:$("pubTitle").value||"RevenuePilot Short",description:$("pubDesc").value||"",categoryId:"22"},status:{privacyStatus:$("privacy").value,selfDeclaredMadeForKids:false}};let boundary="rp_"+Date.now();let pre="--"+boundary+"\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n"+JSON.stringify(meta)+"\r\n--"+boundary+"\r\nContent-Type: "+(f.type||"video/webm")+"\r\n\r\n";let post="\r\n--"+boundary+"--";let body=new Blob([pre,f,post],{type:"multipart/related; boundary="+boundary});$("pubMsg").textContent="Uploading to YouTube…";try{let res=await fetch("https://www.googleapis.com/upload/youtube/v3/videos?part=snippet,status&uploadType=multipart",{method:"POST",headers:{Authorization:"Bearer "+accessToken},body});let txt=await res.text();let data;try{data=JSON.parse(txt)}catch{data={raw:txt}}if(!res.ok)throw new Error(data?.error?.message||txt||("HTTP "+res.status));let url="https://www.youtube.com/watch?v="+data.id;$("pubMsg").innerHTML='<span class="success">Published successfully.</span><br><a target="_blank" href="'+url+'">'+url+'</a>'}catch(e){$("pubMsg").innerHTML='<span class="error">YouTube upload failed: '+esc(e.message)+'</span>'}}
+function showTab(id){document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("active",x.dataset.tab===id));document.querySelectorAll(".view").forEach(x=>x.classList.toggle("active",x.id===id))}
+document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>showTab(b.dataset.tab));
+$("fresh").onclick=fresh;$("render").onclick=renderVideo;$("download").onclick=()=>{if(!videoBlob)return;let a=document.createElement("a");a.href=URL.createObjectURL(videoBlob);a.download="RevenuePilot-"+Date.now()+".webm";a.click()};$("sendPublish").onclick=()=>{showTab("publish");$("pubTitle").value=$("title").value;$("pubDesc").value=$("description").value;$("fileInfo").textContent="Using the video just rendered in AI Video Studio."};$("connectYT").onclick=connectYT;$("disconnectYT").onclick=()=>{accessToken=null;setYTStatus(false);$("pubMsg").textContent="Disconnected."};$("publishYT").onclick=publishYT;$("videoFile").onchange=e=>$("fileInfo").textContent=e.target.files[0]?e.target.files[0].name+" • "+(e.target.files[0].size/1048576).toFixed(1)+" MB":"No video selected.";$("saveSettings").onclick=()=>{localStorage.rpGoogleClientId=$("clientId").value.trim();alert("Saved.")};$("saveMoney").onclick=()=>{localStorage.rpProduct=$("product").value;localStorage.rpCheckout=$("checkout").value;localStorage.rpCTA=$("ctaSetting").value;alert("Saved.");applyTopic(+$("topic").value)};
+fillTopicList();loadSettings();renderQueue();drawFrame($("c").getContext("2d"),0,20,$("title").value,$("hook").value,$("points").value.split("\n"),$("cta").value);
+</script>
+</body></html>
