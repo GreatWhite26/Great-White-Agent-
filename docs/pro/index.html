@@ -1,100 +1,184 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>RevenuePilot Pro</title>
-<meta name="theme-color" content="#39e26d"/>
-<link rel="manifest" href="./manifest.webmanifest"/>
-<link rel="icon" href="../icon.svg" type="image/svg+xml"/>
+<meta name="theme-color" content="#39e26d">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; connect-src 'none'; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self'">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" href="../icon.svg" type="image/svg+xml">
 <style>
-:root{--bg:#0b0f0d;--panel:#121814;--panel2:#18211b;--line:#263229;--text:#eef7ef;--muted:#9bb0a1;--green:#39e26d;--amber:#ffbf47}
+:root{--bg:#0b0f0d;--panel:#121814;--panel2:#18211b;--line:#263229;--text:#eef7ef;--muted:#9bb0a1;--green:#39e26d;--amber:#ffbf47;--red:#ff7e7e}
 *{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 20% 0,#16331d 0,#0b0f0d 36%,#070a08 100%);color:var(--text);font-family:Inter,system-ui,Segoe UI,Arial,sans-serif}
 .wrap{max-width:1180px;margin:auto;padding:22px}.top{display:flex;justify-content:space-between;align-items:center;gap:16px}.brand{display:flex;align-items:center;gap:12px;font-weight:900}.logo{width:42px;height:42px;border:1px solid #3b5;border-radius:12px;display:grid;place-items:center;color:var(--green);background:#132018}.badge{font-size:12px;border:1px solid #31543b;background:#10251a;color:#bff7ce;padding:5px 8px;border-radius:999px}
-button,a.btn{border:0;border-radius:10px;padding:12px 16px;font-weight:800;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center}.primary{background:var(--green);color:#07110a}.secondary{background:#1b251e;color:var(--text);border:1px solid #304136}.ghost{background:transparent;color:var(--text);border:1px solid var(--line)}
-.hero{padding:72px 0 44px;display:grid;grid-template-columns:1.05fr .95fr;gap:30px;align-items:center}.hero h1{font-size:clamp(42px,7vw,76px);line-height:.98;margin:0 0 20px}.hero p{font-size:19px;color:var(--muted);line-height:1.6;max-width:680px}.kicker{color:var(--green);font-weight:900;letter-spacing:.08em;text-transform:uppercase;font-size:13px}
-.card{background:linear-gradient(180deg,var(--panel),#0e140f);border:1px solid var(--line);border-radius:16px;padding:20px;box-shadow:0 18px 60px #0006}.mock{padding:18px}.screen{background:#09100b;border:1px solid #2c3b30;border-radius:13px;padding:16px}.nav{display:flex;gap:7px;flex-wrap:wrap}.pill{padding:7px 10px;border-radius:8px;background:#121a14;color:var(--muted);font-size:12px}.pill.active{background:var(--green);color:#07110a;font-weight:800}.mini{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}.box{background:#111812;border:1px solid #263229;border-radius:10px;padding:14px;min-height:110px}.bar{height:9px;border-radius:99px;background:#243229;margin:8px 0}.bar.g{background:#39e26d;width:72%}.bar.s{width:58%}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:26px 0}.feature h3{margin-bottom:8px}.feature p,.small{color:var(--muted);line-height:1.55}.section{padding:42px 0}.section h2{font-size:38px;margin:0 0 12px}.pricing{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:24px}.plan{position:relative}.plan.pop{border-color:#39e26d;box-shadow:0 0 0 1px #39e26d inset,0 18px 60px #0006}.price{font-size:38px;font-weight:900;margin:14px 0}.list{padding-left:20px;color:#cfe0d1;line-height:1.9}.status{display:inline-flex;align-items:center;gap:7px;font-size:12px;color:var(--muted)}.dot{width:8px;height:8px;border-radius:50%;background:var(--amber)}.footer{padding:42px 0 70px;color:var(--muted);font-size:13px}
-@media(max-width:900px){.hero{grid-template-columns:1fr}.grid3,.pricing{grid-template-columns:1fr}.top{align-items:flex-start;flex-direction:column}}
+button,a.btn{border:0;border-radius:10px;padding:12px 16px;font-weight:800;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center}.primary{background:var(--green);color:#07110a}.secondary{background:#1b251e;color:var(--text);border:1px solid #304136}.ghost{background:transparent;color:var(--text);border:1px solid var(--line)}button:disabled{opacity:.5;cursor:not-allowed}
+.hero{padding:60px 0 34px;display:grid;grid-template-columns:1.05fr .95fr;gap:30px;align-items:center}.hero h1{font-size:clamp(42px,7vw,76px);line-height:.98;margin:0 0 20px}.hero p{font-size:18px;color:var(--muted);line-height:1.6;max-width:680px}.kicker{color:var(--green);font-weight:900;letter-spacing:.08em;text-transform:uppercase;font-size:13px}
+.card{background:linear-gradient(180deg,var(--panel),#0e140f);border:1px solid var(--line);border-radius:16px;padding:20px;box-shadow:0 18px 60px #0006}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.section{padding:38px 0}.section h2{font-size:36px;margin:0 0 12px}.small{color:var(--muted);font-size:13px;line-height:1.55}
+label{display:block;color:var(--muted);font-size:13px;margin:12px 0 6px}input,select,textarea{width:100%;background:#09100b;border:1px solid #2c3b30;color:var(--text);border-radius:10px;padding:11px;font:inherit}textarea{min-height:108px;resize:vertical}.row{display:flex;gap:10px;flex-wrap:wrap}.row>*{flex:1;min-width:160px}
+.demoOut{background:#09100b;border:1px solid #2c3b30;border-radius:12px;padding:16px;min-height:310px}.hook{font-size:27px;font-weight:900;line-height:1.15;margin:8px 0 14px}.point{padding:10px 0;border-top:1px solid #243128}.cta{margin-top:14px;padding:12px;border-radius:10px;background:#10251a;border:1px solid #28543a}.meter{height:8px;background:#1d2920;border-radius:99px;overflow:hidden;margin-top:12px}.meter span{display:block;height:100%;background:var(--green);width:0}.notice{padding:12px;border:1px solid #4d4629;background:#24210f;color:#ffe59b;border-radius:10px}.ok{color:#9bffb7}.warn{color:#ffe59b}.danger{color:#ffb1b1}
+.pricing{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:24px}.plan.pop{border-color:#39e26d}.price{font-size:38px;font-weight:900;margin:14px 0}.list{padding-left:20px;color:#cfe0d1;line-height:1.9}
+.security{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.sec{background:#0b120d;border:1px solid #263229;border-radius:12px;padding:14px}.sec b{display:block;margin-bottom:6px}
+.footer{padding:42px 0 70px;color:var(--muted);font-size:13px}
+@media(max-width:900px){.hero,.grid2{grid-template-columns:1fr}.grid3,.pricing,.security{grid-template-columns:1fr}.top{align-items:flex-start;flex-direction:column}}
 </style>
 </head>
 <body>
 <div class="wrap">
   <div class="top">
-    <div class="brand"><div class="logo">RP</div><div>RevenuePilot Pro <span class="badge">Customer Edition</span></div></div>
-    <div style="display:flex;gap:10px;flex-wrap:wrap">
+    <div class="brand"><div class="logo">RP</div><div>RevenuePilot Pro <span class="badge">Safe Demo</span></div></div>
+    <div class="row" style="flex:0 1 auto">
       <button class="ghost" id="installBtn">Install App</button>
-      <button class="secondary" id="loginBtn">Sign In</button>
-      <button class="primary" id="trialBtn">Start Trial</button>
+      <button class="primary" id="jumpDemo">Try It Free</button>
     </div>
   </div>
 
   <section class="hero">
     <div>
       <div class="kicker">AI content system for contractors</div>
-      <h1>Turn contractor know-how into videos that sell.</h1>
-      <p>RevenuePilot Pro helps contractors generate short-form video ideas, voiceovers, publishing content, calls-to-action, and a repeatable content workflow from one simple desktop-ready app.</p>
-      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:22px">
-        <button class="primary" id="heroTrial">Start Free Trial</button>
-        <button class="secondary" id="demoBtn">Open Demo Workspace</button>
+      <h1>Test RevenuePilot before you buy it.</h1>
+      <p>This customer build now includes a real interactive demo. It does not ask for API keys, payment data, passwords, or private business files, so prospects can safely test the workflow without touching the owner system.</p>
+      <div class="row" style="margin-top:20px;max-width:500px">
+        <button class="primary" id="heroDemo">Launch Free Demo</button>
+        <button class="secondary" id="jumpPlans">View Plans</button>
       </div>
-      <p class="small" style="margin-top:14px">Customer billing, accounts, and protected API access will be connected through the secure backend before public launch.</p>
+      <p class="small">Demo limit: 5 sample generations per browser session. No customer data is stored or sent anywhere.</p>
     </div>
-    <div class="card mock">
-      <div class="screen">
-        <div class="nav">
-          <div class="pill active">AI Studio</div><div class="pill">Publish</div><div class="pill">Queue</div><div class="pill">Analytics</div>
+    <div class="card">
+      <div class="kicker">Isolation</div>
+      <h2 style="margin:8px 0 10px">Owner system stays private</h2>
+      <p class="small">This public customer edition does not contain your Stripe secret keys, ElevenLabs key, Google OAuth secrets, delivery URL, or owner settings. The demo performs all sample generation locally in the browser.</p>
+      <div class="security" style="grid-template-columns:1fr 1fr;margin-top:14px">
+        <div class="sec"><b class="ok">No secrets</b><span class="small">No private API credentials in customer code.</span></div>
+        <div class="sec"><b class="ok">No uploads</b><span class="small">The demo does not accept customer files.</span></div>
+        <div class="sec"><b class="ok">No tracking</b><span class="small">The demo does not transmit entered text.</span></div>
+        <div class="sec"><b class="ok">Separate build</b><span class="small">No access to your owner RevenuePilot settings.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="demo">
+    <div class="kicker">Interactive demo</div>
+    <h2>Let a customer try the workflow right now.</h2>
+    <div class="grid2">
+      <form class="card" id="demoForm">
+        <div class="row">
+          <div><label for="trade">Business / trade</label><select id="trade"><option>General Contractor</option><option>Drywall Contractor</option><option>Metal Framing Contractor</option><option>Concrete Contractor</option><option>Roofing Contractor</option><option>HVAC Contractor</option><option>Plumbing Contractor</option><option>Electrical Contractor</option></select></div>
+          <div><label for="tone">Video tone</label><select id="tone"><option value="bold">Bold</option><option value="professional">Professional</option><option value="educational">Educational</option></select></div>
         </div>
-        <div class="mini">
-          <div class="box"><b>Build a Short</b><div class="bar g"></div><div class="bar s"></div><div class="bar"></div></div>
-          <div class="box"><b>Autopilot</b><p class="small">Generate → Render → Queue → Publish</p><span class="status"><span class="dot"></span>Ready for account setup</span></div>
+        <label for="topic">Topic</label><input id="topic" maxlength="80" value="3 bidding mistakes contractors make">
+        <label for="offer">Call to action / offer</label><input id="offer" maxlength="100" value="Request a free estimate">
+        <label for="goal">Goal</label><select id="goal"><option>Get more leads</option><option>Build authority</option><option>Educate customers</option><option>Promote an offer</option></select>
+        <button class="primary" id="generateBtn" type="submit" style="width:100%;margin-top:16px">Generate Sample Short</button>
+        <div class="meter"><span id="meterBar"></span></div>
+        <div id="demoStatus" class="small" aria-live="polite" style="margin-top:8px">5 free demo generations remaining.</div>
+      </form>
+      <div class="card">
+        <div class="kicker">Sample output</div>
+        <div class="demoOut" id="demoOut">
+          <div class="small">RevenuePilot sample</div>
+          <div class="hook" id="outHook">Stop losing money before the job even starts.</div>
+          <div id="outPoints">
+            <div class="point"><b>1.</b> Price the entire scope—not only square footage.</div>
+            <div class="point"><b>2.</b> Separate labor, material, equipment, and travel.</div>
+            <div class="point"><b>3.</b> Write exclusions before the GC asks.</div>
+          </div>
+          <div class="cta" id="outCta"><b>CTA:</b> Request a free estimate</div>
+          <div class="small" id="outCaption" style="margin-top:14px">#contractor #construction #bidding #smallbusiness</div>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="section">
-    <div class="kicker">What customers get</div>
-    <h2>Built to remove the daily content grind.</h2>
-    <div class="grid3">
-      <div class="card feature"><h3>AI Video Studio</h3><p>Generate contractor-focused hooks, tips, CTAs, video scripts, captions, and vertical short-form content.</p></div>
-      <div class="card feature"><h3>Voice + Sound</h3><p>Connect approved AI voice providers and generate polished voiceovers with background audio.</p></div>
-      <div class="card feature"><h3>Publishing Workflow</h3><p>Queue content, prep YouTube publishing, track activity, and keep the entire workflow in one place.</p></div>
-      <div class="card feature"><h3>Desktop Install</h3><p>Install RevenuePilot like an app on Windows so it opens from the Start menu instead of a browser tab.</p></div>
-      <div class="card feature"><h3>Business CTA System</h3><p>Add offers and links directly into descriptions so content can be tied to lead generation or digital products.</p></div>
-      <div class="card feature"><h3>Customer Accounts</h3><p>Planned secure accounts, subscriptions, usage controls, and protected API keys for the public paid version.</p></div>
-    </div>
-  </section>
-
-  <section class="section">
-    <div class="kicker">Future pricing structure</div>
-    <h2>Simple plans we can turn on when the backend is ready.</h2>
+  <section class="section" id="plans">
+    <div class="kicker">Purchase</div>
+    <h2>Plans are staged—checkout will be activated through secure Stripe-hosted pages.</h2>
+    <div class="notice"><b>Important:</b> I have intentionally not placed a fake checkout or secret Stripe credential into this public page. The plan buttons will become live only after you create the real RevenuePilot subscription products in Stripe.</div>
     <div class="pricing">
-      <div class="card plan"><h3>Starter</h3><div class="price">$29<span class="small">/mo</span></div><ul class="list"><li>AI content generator</li><li>Manual rendering</li><li>Basic queue</li><li>Desktop install</li></ul><button class="secondary planBtn" style="width:100%">Coming Soon</button></div>
-      <div class="card plan pop"><span class="badge">Best value</span><h3>Pro</h3><div class="price">$79<span class="small">/mo</span></div><ul class="list"><li>Everything in Starter</li><li>AI voice workflow</li><li>Autopilot controls</li><li>Publishing workflow</li><li>Analytics</li></ul><button class="primary planBtn" style="width:100%">Coming Soon</button></div>
-      <div class="card plan"><h3>Agency</h3><div class="price">$149<span class="small">/mo</span></div><ul class="list"><li>Everything in Pro</li><li>Multiple brands</li><li>Team access</li><li>Higher usage limits</li><li>Priority support</li></ul><button class="secondary planBtn" style="width:100%">Coming Soon</button></div>
+      <div class="card plan"><h3>Starter</h3><div class="price">$29<span class="small">/mo</span></div><ul class="list"><li>AI content generator</li><li>Manual rendering</li><li>Basic queue</li><li>Desktop install</li></ul><button class="secondary buyBtn" data-plan="Starter" style="width:100%">Checkout setup required</button></div>
+      <div class="card plan pop"><span class="badge">Best value</span><h3>Pro</h3><div class="price">$79<span class="small">/mo</span></div><ul class="list"><li>Everything in Starter</li><li>AI voice workflow</li><li>Autopilot controls</li><li>Publishing workflow</li><li>Analytics</li></ul><button class="primary buyBtn" data-plan="Pro" style="width:100%">Checkout setup required</button></div>
+      <div class="card plan"><h3>Agency</h3><div class="price">$149<span class="small">/mo</span></div><ul class="list"><li>Everything in Pro</li><li>Multiple brands</li><li>Team access</li><li>Higher usage limits</li><li>Priority support</li></ul><button class="secondary buyBtn" data-plan="Agency" style="width:100%">Checkout setup required</button></div>
     </div>
+  </section>
+
+  <section class="section">
+    <div class="kicker">Security design</div>
+    <h2>Built so the public demo has very little to attack.</h2>
+    <div class="security">
+      <div class="sec"><b>Zero client secrets</b><span class="small">Secret API keys will only exist on a future server-side backend.</span></div>
+      <div class="sec"><b>Hosted checkout</b><span class="small">Payments will use Stripe-hosted checkout so card data never touches RevenuePilot.</span></div>
+      <div class="sec"><b>Account isolation</b><span class="small">Paid accounts will use server-verified sessions and per-user access controls.</span></div>
+      <div class="sec"><b>Rate limits</b><span class="small">The production API will enforce usage limits before costly AI calls.</span></div>
+    </div>
+    <p class="small" style="margin-top:14px">No internet-facing system can truthfully be guaranteed “unhackable.” The goal is to reduce attack surface, keep secrets server-side, use trusted payment/auth providers, apply least-privilege access, and monitor abuse.</p>
   </section>
 
   <section class="section">
     <div class="card">
-      <div class="kicker">Owner protection</div>
-      <h2 style="margin-top:8px">Your current RevenuePilot stays separate.</h2>
-      <p class="small">This customer edition is intentionally separate from your Great White owner build. That keeps your Stripe links, delivery settings, private workflow, and personal API configuration out of the customer product.</p>
+      <div class="kicker">Owner version</div>
+      <h2 style="margin-top:8px">Your existing RevenuePilot remains separate.</h2>
+      <p class="small">The public demo cannot read the owner build’s browser storage or private settings through this page.</p>
       <a class="btn secondary" href="../">Open Owner Version</a>
     </div>
   </section>
 
-  <div class="footer">RevenuePilot Pro customer-edition shell • Great White build</div>
+  <div class="footer">RevenuePilot Pro customer-edition demo • No payment credentials or private API keys stored in this page</div>
 </div>
 <script>
-let deferredInstall=null;
-window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();deferredInstall=e});
-async function installApp(){if(deferredInstall){deferredInstall.prompt();await deferredInstall.userChoice;deferredInstall=null}else alert("Use your browser menu and choose Apps → Install this site as an app.");}
-document.getElementById("installBtn").onclick=installApp;
-["trialBtn","heroTrial","loginBtn"].forEach(id=>document.getElementById(id).onclick=()=>alert("Customer accounts and billing are the next secure-backend step. The customer edition front end is built and ready for that connection."));
-document.getElementById("demoBtn").onclick=()=>location.href="../";
-document.querySelectorAll(".planBtn").forEach(b=>b.onclick=()=>alert("Pricing is staged but not charging customers yet."));
-if("serviceWorker" in navigator)window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
+(()=>{
+  const root=document;
+  let uses=0;
+  const limit=5;
+  const $=id=>root.getElementById(id);
+  const clean=s=>String(s||"").replace(/[<>]/g,"").trim().slice(0,120);
+  const phrases={
+    bold:["Stop scrolling—this mistake costs contractors money.","Most contractors learn this one the expensive way.","Before you send that next bid, check this."],
+    professional:["A better estimate starts with a better scope review.","Three details can materially improve your next bid.","Here is a cleaner way to price the next project."],
+    educational:["Here are three things to check before submitting your next bid.","A strong estimate comes down to a few repeatable habits.","Use this quick checklist before you price the next job."]
+  };
+  const tips=[
+    "Price the full scope, not just the headline quantity.",
+    "Separate labor, material, equipment, travel, and subcontractor costs.",
+    "Write inclusions and exclusions before the proposal leaves your desk.",
+    "Adjust production for height, access, phasing, and schedule restrictions.",
+    "Protect profit by documenting change-order work before proceeding.",
+    "Track actual labor hours so future estimates improve."
+  ];
+  function hash(s){let h=0;for(let i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))>>>0;return h}
+  function render(){
+    const topic=clean($("topic").value);
+    const offer=clean($("offer").value)||"Contact us today";
+    const trade=clean($("trade").value);
+    const tone=$("tone").value;
+    const goal=clean($("goal").value);
+    if(topic.length<3){$("demoStatus").textContent="Enter a topic with at least 3 characters.";return}
+    if(uses>=limit){$("demoStatus").textContent="Demo limit reached. A paid account will unlock additional generations.";return}
+    uses++;
+    const seed=hash(topic+trade+goal);
+    const hooks=phrases[tone]||phrases.professional;
+    $("outHook").textContent=hooks[seed%hooks.length];
+    const picked=[tips[seed%tips.length],tips[(seed+2)%tips.length],tips[(seed+4)%tips.length]];
+    $("outPoints").innerHTML="";
+    picked.forEach((t,i)=>{const d=document.createElement("div");d.className="point";const b=document.createElement("b");b.textContent=(i+1)+".";d.append(b,document.createTextNode(" "+t));$("outPoints").appendChild(d)});
+    $("outCta").textContent="CTA: "+offer;
+    $("outCaption").textContent="#"+trade.toLowerCase().replace(/[^a-z0-9]+/g,"")+" #contractor #construction #"+goal.toLowerCase().replace(/[^a-z0-9]+/g,"");
+    const left=limit-uses;
+    $("demoStatus").textContent=left+" free demo generation"+(left===1?"":"s")+" remaining.";
+    $("meterBar").style.width=(uses/limit*100)+"%";
+    if(left===0)$("generateBtn").disabled=true;
+  }
+  $("demoForm").addEventListener("submit",e=>{e.preventDefault();render()});
+  const jump=id=>$(id).scrollIntoView({behavior:"smooth",block:"start"});
+  $("jumpDemo").addEventListener("click",()=>jump("demo"));
+  $("heroDemo").addEventListener("click",()=>jump("demo"));
+  $("jumpPlans").addEventListener("click",()=>jump("plans"));
+  document.querySelectorAll(".buyBtn").forEach(b=>b.addEventListener("click",()=>alert(b.dataset.plan+" checkout is intentionally locked until its real Stripe subscription Payment Link is connected.")));
+  let deferredInstall=null;
+  window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();deferredInstall=e});
+  $("installBtn").addEventListener("click",async()=>{if(deferredInstall){deferredInstall.prompt();await deferredInstall.userChoice;deferredInstall=null}else alert("In Edge or Chrome, open the browser menu and choose Install app / Install RevenuePilot Pro.")});
+  if("serviceWorker" in navigator)window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
+})();
 </script>
 </body>
 </html>
