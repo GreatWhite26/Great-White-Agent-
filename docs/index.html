@@ -4,6 +4,9 @@
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>RevenuePilot Studio</title>
+<meta name="theme-color" content="#39e26d"/>
+<link rel="manifest" href="./manifest.webmanifest"/>
+<link rel="icon" href="./icon.svg" type="image/svg+xml"/>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <style>
 :root{--bg:#0b0f0d;--panel:#121814;--panel2:#18211b;--line:#263229;--text:#eef7ef;--muted:#9bb0a1;--green:#39e26d;--green2:#16b84f;--red:#ff6b6b;--amber:#ffbf47}
@@ -31,6 +34,7 @@ a{color:#8dffab}code{background:#09100b;padding:2px 5px;border-radius:5px}
 <button class="tab" data-tab="delivery">Delivery</button>
 <button class="tab" data-tab="analytics">Analytics</button>
 <button class="tab" data-tab="settings">Settings</button>
+<button class="secondary" id="installApp" style="display:none;margin-left:auto">Install App</button>
 </nav></div></header>
 <main>
 <section id="studio" class="view active">
@@ -74,7 +78,7 @@ a{color:#8dffab}code{background:#09100b;padding:2px 5px;border-radius:5px}
 <label>Google Web Client ID</label><input id="clientId" placeholder="xxxxxxxx.apps.googleusercontent.com">
 <button class="primary" id="saveSettings" style="margin-top:14px">Save Settings</button>
 <p class="small">For GitHub Pages add <code>https://greatwhite26.github.io</code> as an Authorized JavaScript origin in Google Cloud.</p>
-</div><div class="card"><h2>Money Settings</h2><label>Product</label><input id="product" value="Contractor Bid Starter Pack"><label>Checkout URL</label><input id="checkout" placeholder="https://..."><label>CTA</label><input id="ctaSetting" value="Get the Contractor Bid Starter Pack — link in description."><button class="secondary" id="saveMoney" style="margin-top:14px">Save</button></div><div class="card"><h2>AI Voice + Sound</h2><p class="small">Use ElevenLabs for natural voiceover. The key is stored only in this browser.</p><label>ElevenLabs API Key</label><input id="elevenKey" type="password" placeholder="Paste your ElevenLabs API key"><label>Voice</label><select id="voiceSelect"><option value="">Save key, then load voices</option></select><div class="row"><button class="secondary" id="loadVoices">Load Voices</button><button class="primary" id="saveVoice">Save Voice Setup</button></div><div id="voiceMsg" class="small" style="margin-top:10px"></div></div></div>
+</div><div class="card"><h2>Money Settings</h2><label>Product</label><input id="product" value="Contractor Bid Starter Pack"><label>Checkout URL</label><input id="checkout" placeholder="https://..."><label>CTA</label><input id="ctaSetting" value="Get the Contractor Bid Starter Pack — link in description."><button class="secondary" id="saveMoney" style="margin-top:14px">Save</button></div><div class="card"><h2>AI Voice + Sound</h2><p class="small">Use ElevenLabs for natural voiceover. The key is stored only in this browser.</p><label>ElevenLabs API Key</label><input id="elevenKey" type="password" placeholder="Paste your ElevenLabs API key"><label>Voice</label><select id="voiceSelect"><option value="">Save key, then load voices</option></select><div class="row"><button class="secondary" id="loadVoices">Load Voices</button><button class="primary" id="saveVoice">Save Voice Setup</button></div><div id="voiceMsg" class="small" style="margin-top:10px"></div></div><div class="card"><h2>Desktop App</h2><p class="small">Install RevenuePilot on this computer so it opens like a normal desktop app from the Start menu or taskbar.</p><button class="primary" id="installAppSettings">Install RevenuePilot</button><div id="installMsg" class="small" style="margin-top:10px">If the button is unavailable, use your browser menu and choose <b>Install RevenuePilot Studio</b> or <b>Apps → Install this site as an app</b>.</div><hr style="border:0;border-top:1px solid var(--line);margin:18px 0"><h3>Future product version</h3><p class="small">This build can later be packaged as a customer-facing paid app with licensing, account sign-in, plans, and protected server-side AI keys without changing your owner version.</p></div></div>
 </section>
 </main>
 <script>
@@ -125,6 +129,27 @@ function startAutopilot(){if(autoTimer)clearInterval(autoTimer);let mins=+$("aut
 function stopAutopilot(){if(autoTimer)clearInterval(autoTimer);autoTimer=null;if($("autoMsg"))$("autoMsg").textContent="Autopilot stopped."}
 document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>showTab(b.dataset.tab));
 $("fresh").onclick=fresh;$("render").onclick=renderVideo;$("download").onclick=()=>{if(!videoBlob)return;let a=document.createElement("a");a.href=URL.createObjectURL(videoBlob);a.download="RevenuePilot-"+Date.now()+".webm";a.click()};$("sendPublish").onclick=()=>{showTab("publish");$("pubTitle").value=$("title").value;$("pubDesc").value=$("description").value;$("fileInfo").textContent="Using the video just rendered in AI Video Studio."};$("connectYT").onclick=connectYT;$("disconnectYT").onclick=()=>{accessToken=null;setYTStatus(false);$("pubMsg").textContent="Disconnected."};$("publishYT").onclick=publishYT;$("videoFile").onchange=e=>$("fileInfo").textContent=e.target.files[0]?e.target.files[0].name+" • "+(e.target.files[0].size/1048576).toFixed(1)+" MB":"No video selected.";$("saveSettings").onclick=()=>{localStorage.rpGoogleClientId=$("clientId").value.trim();alert("Saved.")};$("saveMoney").onclick=()=>{localStorage.rpProduct=$("product").value;localStorage.rpCheckout=$("checkout").value;localStorage.rpCTA=$("ctaSetting").value;if($("moneyCheckout"))$("moneyCheckout").value=localStorage.rpCheckout;alert("Saved.");applyTopic(+$("topic").value)};if($("startAuto"))$("startAuto").onclick=startAutopilot;if($("stopAuto"))$("stopAuto").onclick=stopAutopilot;if($("moneyCheckout"))$("moneyCheckout").value=localStorage.rpCheckout||"";if($("saveCheckout"))$("saveCheckout").onclick=()=>{let u=$("moneyCheckout").value.trim();if(u&&!/^https:\/\//i.test(u)){$("checkoutMsg").innerHTML='<span class="error">Use the full https:// Stripe checkout URL.</span>';return}localStorage.rpCheckout=u;$("checkout").value=u;applyTopic(+$("topic").value);$("checkoutMsg").innerHTML='<span class="success">Checkout link connected to new video descriptions.</span>'};if($("testCheckout"))$("testCheckout").onclick=()=>{let u=(localStorage.rpCheckout||"").trim();if(!u){alert("Save the Stripe checkout link first.");return}let ref="rp"+Date.now().toString(36);logCheckout(ref);window.open(u,"_blank")};if($("deliveryUrl"))$("deliveryUrl").value=localStorage.rpDeliveryUrl||"";if($("deliverySubject"))$("deliverySubject").value=localStorage.rpDeliverySubject||"Your Contractor Bid Starter Pack";if($("deliveryBody"))$("deliveryBody").value=localStorage.rpDeliveryBody||"Thanks for your purchase. Your Contractor Bid Starter Pack is ready at the link below.";if($("saveDelivery"))$("saveDelivery").onclick=()=>{localStorage.rpDeliveryUrl=$("deliveryUrl").value.trim();localStorage.rpDeliverySubject=$("deliverySubject").value.trim();localStorage.rpDeliveryBody=$("deliveryBody").value;$("deliveryMsg").innerHTML='<span class="success">Delivery setup saved.</span>'};if($("loadVoices"))$("loadVoices").onclick=loadVoices;if($("saveVoice"))$("saveVoice").onclick=saveVoiceSetup;
+let deferredInstallPrompt=null;
+function updateInstallButtons(show){
+  const top=$("installApp"),settings=$("installAppSettings");
+  if(top)top.style.display=show?"inline-block":"none";
+  if(settings)settings.disabled=!show;
+}
+async function installRevenuePilot(){
+  if(!deferredInstallPrompt){
+    if($("installMsg"))$("installMsg").innerHTML='Use your browser menu and choose <b>Install RevenuePilot Studio</b> or <b>Apps → Install this site as an app</b>.';
+    return;
+  }
+  deferredInstallPrompt.prompt();
+  const choice=await deferredInstallPrompt.userChoice;
+  if($("installMsg"))$("installMsg").innerHTML=choice.outcome==="accepted"?'<span class="success">RevenuePilot installed. You can open it from your Start menu.</span>':'Install canceled.';
+  deferredInstallPrompt=null;updateInstallButtons(false);
+}
+window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();deferredInstallPrompt=e;updateInstallButtons(true)});
+window.addEventListener("appinstalled",()=>{deferredInstallPrompt=null;updateInstallButtons(false);if($("installMsg"))$("installMsg").innerHTML='<span class="success">RevenuePilot is installed on this computer.</span>'});
+if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}))}
+if($("installApp"))$("installApp").onclick=installRevenuePilot;
+if($("installAppSettings"))$("installAppSettings").onclick=installRevenuePilot;
 fillTopicList();loadSettings();renderQueue();renderClicks();renderAnalytics();drawFrame($("c").getContext("2d"),0,20,$("title").value,$("hook").value,$("points").value.split("\n"),$("cta").value);
 </script>
 </body></html>
