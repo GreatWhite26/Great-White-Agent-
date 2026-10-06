@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>RevenuePilot App</title>
+<style>
+:root{--bg:#0b0f0d;--panel:#121814;--line:#263229;--text:#eef7ef;--muted:#9bb0a1;--green:#39e26d}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,Segoe UI,Arial}.wrap{max-width:1000px;margin:auto;padding:24px}.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px;margin-bottom:16px}.row{display:flex;gap:10px;flex-wrap:wrap}.row>*{flex:1;min-width:180px}label{display:block;color:var(--muted);font-size:13px;margin:12px 0 6px}input{width:100%;background:#09100b;border:1px solid #2c3b30;color:var(--text);border-radius:10px;padding:11px}button{border:0;border-radius:10px;padding:12px 16px;font-weight:800;cursor:pointer}.primary{background:var(--green);color:#07110a}.secondary{background:#1b251e;color:var(--text);border:1px solid #304136}.muted{color:var(--muted)}.point{padding:10px 0;border-top:1px solid #263229}.danger{color:#ffb3b3}</style></head>
+<body><div class="wrap">
+<div class="card"><h1>RevenuePilot</h1><div id="account" class="muted">Checking account…</div><div class="row" style="margin-top:12px"><button class="secondary" id="signout">Sign out</button></div></div>
+<div class="card" id="locked"><h2>Subscription required</h2><p class="muted">An active RevenuePilot subscription is required to use the production generator.</p><a href="/" style="color:#39e26d">Choose a plan</a></div>
+<div class="card" id="studio" style="display:none"><h2>AI Content Studio</h2><div class="row"><div><label>Trade</label><input id="trade" value="General Contractor" maxlength="80"></div><div><label>Topic</label><input id="topic" value="3 bidding mistakes" maxlength="120"></div></div><label>CTA</label><input id="offer" value="Request a free estimate" maxlength="100"><button class="primary" id="gen" style="margin-top:14px">Generate</button><div id="status" class="muted" style="margin-top:10px"></div><div id="out" style="margin-top:16px"></div></div>
+</div>
+<script type="module">
+import {createClient} from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4/+esm";
+const $=id=>document.getElementById(id);let sb=null,token="";
+async function boot(){
+  try{const c=await fetch("/api/config").then(r=>r.ok?r.json():Promise.reject());sb=createClient(c.supabaseUrl,c.supabaseAnonKey)}
+  catch{$("account").innerHTML='<span class="danger">Production auth is not configured yet.</span>';return}
+  const {data}=await sb.auth.getSession();if(!data.session){location.href="/";return}
+  token=data.session.access_token;$("account").textContent=data.session.user.email;
+  const r=await fetch("/api/me",{headers:{Authorization:"Bearer "+token}});const d=await r.json();
+  if(r.ok&&d.subscription&&["active","trialing"].includes(d.subscription.status)){
+    $("locked").style.display="none";$("studio").style.display="block";$("account").textContent+=" • "+d.subscription.plan+" • "+d.subscription.status
+  }
+}
+$("gen").onclick=async()=>{
+  $("status").textContent="Generating…";$("out").textContent="";
+  const r=await fetch("/api/generate",{method:"POST",headers:{"Content-Type":"application/json",Authorization:"Bearer "+token},body:JSON.stringify({trade:$("trade").value,topic:$("topic").value,offer:$("offer").value})});
+  const d=await r.json();if(!r.ok){$("status").textContent=d.error||"Failed";return}
+  $("status").textContent="Ready";const h=document.createElement("h3");h.textContent=d.hook;$("out").appendChild(h);
+  d.points.forEach((p,i)=>{const x=document.createElement("div");x.className="point";x.textContent=(i+1)+". "+p;$("out").appendChild(x)});
+  const c=document.createElement("div");c.className="point";c.textContent="CTA: "+d.cta+" • "+d.caption;$("out").appendChild(c)
+};
+$("signout").onclick=async()=>{if(sb)await sb.auth.signOut();location.href="/"};boot();
+</script></body></html>
