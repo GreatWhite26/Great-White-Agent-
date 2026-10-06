@@ -1,0 +1,13 @@
+{
+  "name": "revenuepilot-saas",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vercel dev"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.57.4",
+    "stripe": "^18.5.0"
+  }
+}
