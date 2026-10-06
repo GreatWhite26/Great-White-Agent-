@@ -23,14 +23,12 @@
 </div>
 <script type="module">
 import {createClient} from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4/+esm";
-const SUPABASE_URL="__SUPABASE_URL__";
-const SUPABASE_ANON_KEY="__SUPABASE_ANON_KEY__";
-const configured=!SUPABASE_URL.includes("__");
-const sb=configured?createClient(SUPABASE_URL,SUPABASE_ANON_KEY):null;
+let sb=null,configured=false;
+try{const c=await fetch("/api/config").then(r=>r.ok?r.json():Promise.reject());sb=createClient(c.supabaseUrl,c.supabaseAnonKey);configured=true}catch{}
 const $=id=>document.getElementById(id);
 async function session(){if(!sb)return null;const {data}=await sb.auth.getSession();return data.session}
 async function refresh(){const s=await session();$("authStatus").textContent=s?("Signed in as "+s.user.email):"Not signed in.";return s}
-$("signin").onclick=async()=>{if(!configured){$("msg").textContent="Secure auth is built but not connected to the production Supabase project yet.";return}const email=prompt("Enter your email for a secure sign-in link:");if(!email)return;const {error}=await sb.auth.signInWithOtp({email,options:{emailRedirectTo:location.origin+"/app/"}});$("msg").textContent=error?error.message:"Check your email for the sign-in link."};
+$("signin").onclick=async()=>{if(!configured){$("msg").textContent="Secure auth is built but not connected to the production Supabase project yet.";return}const email=prompt("Enter your email for a secure sign-in link:");if(!email)return;const {error}=await sb.auth.signInWithOtp({email,options:{emailRedirectTo:location.origin+"/app.html"}});$("msg").textContent=error?error.message:"Check your email for the sign-in link."};
 document.querySelectorAll(".buy").forEach(b=>b.onclick=async()=>{if(!configured){$("msg").textContent="Checkout backend is built but production credentials still need to be connected.";return}const s=await refresh();if(!s){$("msg").textContent="Sign in first.";return}$("msg").textContent="Opening secure Stripe Checkout…";const r=await fetch("/api/create-checkout",{method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer "+s.access_token},body:JSON.stringify({plan:b.dataset.plan})});const d=await r.json();if(!r.ok){$("msg").textContent=d.error||"Checkout failed";return}location.href=d.url});
 refresh();
 </script>
