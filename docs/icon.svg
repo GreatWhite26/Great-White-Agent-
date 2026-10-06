@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+<rect width="512" height="512" rx="112" fill="#0b0f0d"/>
+<rect x="42" y="42" width="428" height="428" rx="92" fill="#132018" stroke="#39e26d" stroke-width="18"/>
+<path d="M98 302c75-18 106-86 169-93 60-7 111 34 147 97-46-27-86-31-121-13 30 18 47 47 52 86-33-30-72-49-118-51-47-2-88-10-129-26z" fill="#39e26d"/>
+<text x="256" y="184" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="92" font-weight="800" fill="#eef7ef">RP</text>
+</svg>
