@@ -44,7 +44,8 @@ a{color:#8dffab}code{background:#09100b;padding:2px 5px;border-radius:5px}
 <label>Key points — one per line</label><textarea id="points"></textarea>
 <label>CTA</label><input id="cta" value="Stop guessing on bids. Get the Contractor Bid Starter Pack — link in description.">
 <label>YouTube description</label><textarea id="description"></textarea>
-<div class="row" style="margin-top:14px"><button class="secondary" id="fresh">Generate Fresh Content</button><button class="primary" id="render">Render Video</button></div>
+<div class="row"><div><label>Audio style</label><select id="audioStyle"><option value="energy">Upbeat construction beat</option><option value="clean">Clean light beat</option><option value="none">No background audio</option></select></div><div><label>Visual style</label><select id="visualStyle"><option value="bold">Bold kinetic captions</option><option value="clean">Clean professional</option><option value="dark">Dark high-contrast</option></select></div></div>
+<div class="row" style="margin-top:14px"><button class="secondary" id="fresh">Generate Fresh Content</button><button class="primary" id="render">Render Video + Sound</button></div>
 <div id="renderMsg" class="small" style="margin-top:12px"></div>
 </div>
 <div class="card"><h3>Video Preview</h3><canvas id="c" width="1080" height="1920"></canvas><video id="preview" controls playsinline style="display:none;width:100%;max-width:360px;aspect-ratio:9/16;margin:auto;border-radius:15px;background:#000"></video>
